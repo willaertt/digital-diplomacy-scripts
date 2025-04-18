@@ -1,7 +1,6 @@
 '''
 We loop over each of the topic models we have created, and finetune their representation
-Store information about the topics (their hierarchies etc.)
-We then annotate each message in the dataset for the retrieved topics (for the different sizes)
+We store the updated topic models
 '''
 
 #import libraries
@@ -32,6 +31,10 @@ if __name__ == "__main__":
 
     #load the topic models of different sizes
     for topic_model_directory in os.listdir(topic_model_files):
+
+        #do not run the updates on any other topic model than the one with min_cluster_size 70 (comment out to run on all models)
+        if not topic_model_directory.endswith('70_updated'):
+            continue
 
         #do not run if model has already been updated
         if topic_model_directory.endswith('_updated'):
@@ -72,40 +75,3 @@ if __name__ == "__main__":
         print('save updated topic model')
         embedding_model = SentenceTransformer("paraphrase-multilingual-mpnet-base-v2")
         topic_model.save(updated_topic_model_directory, serialization="safetensors", save_ctfidf=True, save_embedding_model=embedding_model)
-
-        print('save topic information')
-        topic_info_df = topic_model.get_topic_info()
-        topic_info_df = topic_info_df.rename(columns={'Topic': 'topic_number', 'Count': 'topic_count', 'Name':'topic_name', 'CustomName': 'topic_custom_name', 'Representation': 'topic_representation', 'Representative_Docs': 'topic_representative_docs'}) 
-        topic_info_df.to_csv(os.path.join(updated_topic_model_directory, 'topic_model_info.csv'), index=False)
-
-        print('save document-level information of topics')
-        document_info = topic_model.get_document_info(docs)
-        document_info.to_csv(os.path.join(updated_topic_model_directory, 'document_info.csv'), index=False)
-
-        #save visualizations for the topics
-        print('save topic visualization')
-        fig = topic_model.visualize_topics(custom_labels= True)
-        fig.write_html(os.path.join(updated_topic_model_directory, "topic_visualization.html"))
-
-        #save hierarchical topic representation
-        print('save topic hierarchical representation as html')
-        fig_hierarchy = topic_model.visualize_hierarchy(custom_labels = True)
-        fig_hierarchy.write_html(os.path.join(updated_topic_model_directory, "topic_hierarchy.html"))
-
-        print('finetune topic hierarchy figure and save as png')
-        fig_hierarchy = topic_model.visualize_hierarchy(custom_labels = True)
-        fig_hierarchy.update_layout(width=1300, height= 8000, title_text='')
-        fig_hierarchy.write_image(os.path.join(updated_topic_model_directory, 'topic_hierarchy.png'), scale =3)
-
-        #save bar chart for top n topics
-        print('save bar chart for top n topics')
-        n = 10
-        fig_barchart = topic_model.visualize_barchart(top_n_topics=n, custom_labels= True)
-        fig_barchart.write_html(os.path.join(updated_topic_model_directory, "topic_barchart.html"))
-
-        print('save dataset with annotations for topics')
-        topic_size_string = topic_model_path.split('_')[-1] #get the topic model min cluster size string to name the topic column
-        filtered_df['topic_number'] = topic_model.topics_ 
-        annotated_embassy_df = embassy_df.merge(filtered_df[['original_index', 'topic_number']], on='original_index', how='left') 
-        annotated_embassy_df = annotated_embassy_df.merge(topic_info_df[['topic_number', 'topic_count', 'topic_name', 'topic_custom_name', 'topic_representation', 'topic_representative_docs']], on = 'topic_number', how = 'left')
-        annotated_embassy_df.to_csv(os.path.join(updated_topic_model_directory, 'sample_with_topic_annotations.csv'), index = False)

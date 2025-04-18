@@ -1,5 +1,5 @@
 '''
-Descriptive analysis of the dataset (message_frequency, etc.)
+Descriptive analysis of the dataset (message frequency, linguistic composition, etc.)
 '''
 
 
@@ -554,7 +554,7 @@ if __name__ == "__main__":
 
     #plot dataset composition as treemap
     print('plot treemap')
-    plot_treemap(embassy_df,'outputs/figures/fig1_treemap.png')  
+    plot_treemap(embassy_df,'outputs/figures/fig1_treemap.pdf')  
     
     # #produce graph of aggregated views over time
     # print('plot views')
@@ -562,14 +562,14 @@ if __name__ == "__main__":
 
     #plot channel creation dates and activity (Gantt chart)
     print('plot dataset activity gantt')
-    plot_activity_gantt(embassy_df, 'outputs/figures/fig2_activity_gantt.png', 'Gantt chart of channel creation date and activity')
+    plot_activity_gantt(embassy_df, 'outputs/figures/fig2_activity_gantt.pdf', 'Gantt chart of channel creation date and activity')
 
     print('plot zoomed in activity gantt')
-    plot_zoomed_activity_gantt(embassy_df, 'outputs/figures/fig3_zoomed_activity_gantt.png', 'zoomed-in Gantt chart of channel creation date and activity', '2022-01-01', '2022-04-01')
+    plot_zoomed_activity_gantt(embassy_df, 'outputs/figures/fig3_zoomed_activity_gantt.pdf', 'zoomed-in Gantt chart of channel creation date and activity', '2022-01-01', '2022-04-01')
 
     # print('plot first messages gantt')
     # plot_first_message_gantt(embassy_df, 'outputs/figures/fig3_first_message_gantt.png', 'time between channel creation and first post', '2022-02-20', '2022-03-01')
 
     #plot message frequency over time
     print('plot message frequency over time')
-    plot_message_frequency(embassy_df, 'outputs/figures/fig4_message_timeseries.png')
+    plot_message_frequency(embassy_df, 'outputs/figures/fig4_message_timeseries.pdf')

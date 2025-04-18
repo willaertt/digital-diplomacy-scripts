@@ -1,20 +1,6 @@
 '''
 Pipeline for training and storing topic models with different minimum topic sizes
-
-Topic modelling using BERTopic
-https://maartengr.github.io/BERTopic/index.html#quick-start 
-
-@article{grootendorst2022bertopic,
-  title={BERTopic: Neural topic modeling with a class-based TF-IDF procedure},
-  author={Grootendorst, Maarten},
-  journal={arXiv preprint arXiv:2203.05794},
-  year={2022}
-}
-
-
-model choice: https://maartengr.github.io/BERTopic/faq.html#why-are-the-results-not-consistent-between-runs
 model documentation: https://huggingface.co/sentence-transformers/paraphrase-multilingual-mpnet-base-v2/blob/main/README.md 
-
 '''
 
 #import libraries
@@ -26,7 +12,7 @@ from sentence_transformers import SentenceTransformer
 
 if __name__ == "__main__":
 
-    #specify paths to data files
+    #specify path to data files
     csv_sample_file = "/home/tom/Documents/data/geopolitics_of_propaganda/4cat_data_sample.csv"
    
     #load data
